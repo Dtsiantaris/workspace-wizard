@@ -2,6 +2,8 @@ import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import os from 'os';
 import { fileURLToPath } from 'url'
+import psList from 'ps-list';
+import psNode from 'ps-node';
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
@@ -63,3 +65,30 @@ app.on('activate', () => {
     void createWindow();
   }
 });
+
+const AllProcesses = await psList({ all: false });
+
+const GroupedByParent = AllProcesses.reduce((map, process) => {
+  const ppid = process.ppid;
+
+  // Check if the map already has this ppid as a key
+  if (!map.has(ppid)) {
+    map.set(ppid, []);
+  }
+
+  // Push the current process into the array for this ppid
+  map.get(ppid)!.push(process);
+
+  return map;
+}, new Map<number, typeof AllProcesses>());
+
+
+GroupedByParent.forEach((_val, key) => {
+  psNode.lookup({pid:key}, (err, resultList) => {
+    if(err) {
+      throw new Error(err.message)
+    }
+
+    console.log('program', resultList[0].)
+  })
+})
