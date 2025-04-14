@@ -1,1 +1,6 @@
 // app global css in SCSS form
+@import url('/fonts/inter.css');
+
+body {
+  font-family: 'InterVariable', 'Inter', sans-serif;
+}
