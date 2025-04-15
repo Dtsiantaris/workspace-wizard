@@ -2,9 +2,10 @@ import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import os from 'os';
 import { fileURLToPath } from 'url'
-import psList from 'ps-list';
-import psNode from 'ps-node';
-
+import koffi from 'koffi'
+import type { EnumeratedWindow } from 'app/src-electron/windows/types';
+import { isSystemWindow } from 'app/src-electron/windows/tools';
+import { getProcessPath } from 'app/src-electron/windows/process';
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
 
@@ -66,29 +67,62 @@ app.on('activate', () => {
   }
 });
 
-const AllProcesses = await psList({ all: false });
+// Load user32.dll
+const user32 = koffi.load('user32.dll');
 
-const GroupedByParent = AllProcesses.reduce((map, process) => {
-  const ppid = process.ppid;
+// Define the callback function type (must use __stdcall on Windows)
+const EnumWindowsProc = koffi.proto('bool __stdcall EnumWindowsProc(void* hWnd, long lParam)');
 
-  // Check if the map already has this ppid as a key
-  if (!map.has(ppid)) {
-    map.set(ppid, []);
-  }
-
-  // Push the current process into the array for this ppid
-  map.get(ppid)!.push(process);
-
-  return map;
-}, new Map<number, typeof AllProcesses>());
+// Define necessary functions
+const EnumWindows = user32.func('bool EnumWindows(EnumWindowsProc* lpEnumFunc, long lParam)');
+const GetWindowTextW = user32.func('int GetWindowTextW(void* hWnd, wchar_t* lpString, int nMaxCount)');
+const IsWindowVisible = user32.func('bool IsWindowVisible(void* hWnd)');
+const GetWindowThreadProcessId = user32.func('uint32 GetWindowThreadProcessId(void* hWnd, uint32* lpdwProcessId)');
 
 
-GroupedByParent.forEach((_val, key) => {
-  psNode.lookup({pid:key}, (err, resultList) => {
-    if(err) {
-      throw new Error(err.message)
+// Create an array to store window information
+const EnumeratedWindows: EnumeratedWindow[] = [];
+
+// Register the callback function
+const enumCallback = koffi.register((hWnd: unknown) => {
+    // Check if window is visible
+    if (IsWindowVisible(hWnd)) {
+        // Get window title
+        const buffer = Buffer.alloc(512);
+        GetWindowTextW(hWnd, buffer, 256);
+        const title = buffer.toString('ucs2').replace(/\0+$/, '');
+
+        // Get process ID using Buffer
+        const pidBuffer = Buffer.alloc(4);
+        GetWindowThreadProcessId(hWnd, pidBuffer);
+        const pid = pidBuffer.readUInt32LE(0);
+
+        // Only add windows with titles
+        if (title.length > 0) {
+            EnumeratedWindows.push({
+                handle: hWnd,
+                title: title,
+                processId: pid
+            });
+        }
     }
 
-    console.log('program', resultList[0].)
-  })
-})
+    // Return true to continue enumeration
+    return true;
+}, koffi.pointer(EnumWindowsProc));
+
+// Enumerate all top-level windows
+EnumWindows(enumCallback, 0);
+
+// Unregister the callback when done
+koffi.unregister(enumCallback);
+
+console.log(`Found ${EnumeratedWindows.length} visible windows:`);
+EnumeratedWindows.forEach((enWindow, index) => {
+    console.log(`${index + 1}. ${enWindow.title} (PID: ${enWindow.processId})`);
+    console.log('IS SYSTEM WINDOW:', isSystemWindow(enWindow))
+    if(!isSystemWindow(enWindow)) {
+      const processPath = getProcessPath(enWindow.processId);
+      console.log('Process path', processPath)
+    }
+});

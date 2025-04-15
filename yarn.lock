@@ -805,11 +805,6 @@
   dependencies:
     undici-types "~6.19.2"
 
-"@types/ps-node@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@types/ps-node/-/ps-node-0.1.3.tgz#368fbde6ea0103c24096f0adbeba48fce227e608"
-  integrity sha512-9lJ7dWmWsdZnh/QMwX11+T+Se8Q1dk4LJqUwAEMsl7riiYmvmSl/Hfr7FlfJawD2+eb12A1hYAmu1J89k2PVdQ==
-
 "@types/qs@*":
   version "6.9.18"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.18.tgz#877292caa91f7c1b213032b34626505b746624c2"
@@ -1627,11 +1622,6 @@ confbox@^0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/confbox/-/confbox-0.1.8.tgz#820d73d3b3c82d9bd910652c5d4d599ef8ff8b06"
   integrity sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==
-
-connected-domain@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/connected-domain/-/connected-domain-1.0.0.tgz#bfe77238c74be453a79f0cb6058deeb4f2358e93"
-  integrity sha512-lHlohUiJxlpunvDag2Y0pO20bnvarMjnrdciZeuJUqRwrf/5JHNhdpiPIr5GQ8IkqrFj5TDMQwcCjblGo1oeuA==
 
 content-disposition@0.5.4:
   version "0.5.4"
@@ -2932,6 +2922,11 @@ kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
+koffi@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/koffi/-/koffi-2.11.0.tgz#9836a56f727b896b7916a84e7954217c9548c624"
+  integrity sha512-AJ6MHz9Z8OIftKu322jrKJFvy/rZTdCD4b7F457WrK71rxYV7O5PSdWsJDN0p3rY1BZaPeLHVwyt4i2Xyk8wJg==
+
 kolorist@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/kolorist/-/kolorist-1.8.0.tgz#edddbbbc7894bc13302cdf740af6374d4a04743c"
@@ -3613,18 +3608,6 @@ proxy-addr@~2.0.7:
   dependencies:
     forwarded "0.2.0"
     ipaddr.js "1.9.1"
-
-ps-list@^8.1.1:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/ps-list/-/ps-list-8.1.1.tgz#9ff1952b26a9a07fcc05270407e60544237ae581"
-  integrity sha512-OPS9kEJYVmiO48u/B9qneqhkMvgCxT+Tm28VCEJpheTpl8cJ0ffZRRNgS5mrQRTrX5yRTpaJ+hRDeefXYmmorQ==
-
-ps-node@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/ps-node/-/ps-node-0.1.6.tgz#9af67a99d7b1d0132e51a503099d38a8d2ace2c3"
-  integrity sha512-w7QJhUTbu70hpDso0YXDRNKCPNuchV8UTUZsAv0m7Qj5g85oHOJfr9drA1EjvK4nQK/bG8P97W4L6PJ3IQLoOA==
-  dependencies:
-    table-parser "^0.1.3"
 
 pump@^3.0.0:
   version "3.0.2"
@@ -4403,13 +4386,6 @@ synckit@^0.11.0:
   dependencies:
     "@pkgr/core" "^0.2.3"
     tslib "^2.8.1"
-
-table-parser@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/table-parser/-/table-parser-0.1.3.tgz#0441cfce16a59481684c27d1b5a67ff15a43c7b0"
-  integrity sha512-LCYeuvqqoPII3lzzYaXKbC3Forb+d2u4bNwhk/9FlivuGRxPE28YEWAYcujeSlLLDlMfvy29+WPybFJZFiKMYg==
-  dependencies:
-    connected-domain "^1.0.0"
 
 tar-stream@^3.0.0:
   version "3.1.7"
